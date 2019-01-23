@@ -18,7 +18,7 @@
 
               var options = {
                   title: 'My Daily Activities',
-                  pieHole: 0.6,
+                  pieHole: 0.4,
               };
               var source   = document.getElementById('donutchart').innerHTML;
               var template = Handlebars.compile(source);
@@ -40,7 +40,7 @@
   <script id="donutchart" type="text/x-handlebars-template">
       {{piechart}}
   </script>
-  <div id="result">
+  <div id="result" >
 
   </div>
   </body>
