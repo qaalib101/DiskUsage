@@ -4,6 +4,7 @@
         google.charts.load("current", {packages:["corechart"]});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
+
             var data = google.visualization.arrayToDataTable([
                 ['Storage', 'Disk Usage'],
                 ['Empty',     4],
@@ -34,4 +35,9 @@
 </script>
 <div id="result" style="width: 900px; height: 500px;">
 
+</div>
+<div>
+    Total disk space: {{disk.total}}
+    Total disk used: {{disk.used}}
+    Total disk free: {{disk.free}}
 </div>
