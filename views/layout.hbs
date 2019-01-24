@@ -1,47 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-      <script type="text/javascript">
-          google.charts.load("current", {packages:["corechart"]});
-          google.charts.setOnLoadCallback(drawChart);
-          function drawChart() {
-              var data = google.visualization.arrayToDataTable([
-                  ['Task', 'Hours per Day'],
-                  ['Work',     11],
-                  ['Eat',      2],
-                  ['Commute',  2],
-                  ['Watch TV', 2],
-                  ['Sleep',    7]
-              ]);
-
-              var options = {
-                  title: 'My Daily Activities',
-                  pieHole: 0.4,
-              };
-              var source   = document.getElementById('donutchart').innerHTML;
-              var template = Handlebars.compile(source);
-              var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-
-              var context = {donutchart: chart};
-              var html    = template(context);
-              document.getElementById('result').innerHTML = html;
-
-              chart.draw(data, options);
-
-          }
-      </script>
     <title>{{title}}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
     {{{body}}}
-  <script id="donutchart" type="text/x-handlebars-template">
-      {{piechart}}
-  </script>
-  <div id="result" style="width: 900px; height: 500px;">
-
-  </div>
   </body>
 </html>
