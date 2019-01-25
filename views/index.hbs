@@ -4,11 +4,12 @@
         google.charts.load("current", {packages:["corechart"]});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
-
+            var free = document.getElementById("freeDisk").innerText;
+            var used = document.getElementById("usedDisk").innerText;
             var data = google.visualization.arrayToDataTable([
                 ['Storage', 'Disk Usage'],
-                ['Empty',     4],
-                ['Used',      20]
+                ['Empty',     free],
+                ['Used',      used]
             ]);
 
             var options = {
@@ -37,7 +38,9 @@
 
 </div>
 <div>
-    Total disk space: {{disk.total}}
-    Total disk used: {{disk.used}}
-    Total disk free: {{disk.free}}
+    Total disk space: <div id="totalDisk">{{disk.total}}</div> bytes
+    <br>
+    Total disk used: <div id="usedDisk">{{disk.used}}</div> bytes
+    <br>
+    Total disk free: <div id="freeDisk">{{disk.free}}</div> bytes
 </div>

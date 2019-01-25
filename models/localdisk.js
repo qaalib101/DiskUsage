@@ -1,11 +1,15 @@
 var diskspace = require("diskspace");
 
 // get disk space
-diskspace.check('C', function(err, result){
-    module.exports = {
-        free: result.free,
-        total: result.total,
-        empty: result.empty
-    };
-});
+function diskRequest(callback){
+    diskspace.check('C', function(err, result){
+        var diskData = {
+            "total": result.total,
+            "free": result.free,
+            "used": result.used
+        };
+        callback(diskData);
+    });
+}
+module.exports = diskRequest;
 
