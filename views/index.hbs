@@ -1,32 +1,36 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
         google.charts.load("current", {packages:["corechart"]});
         google.charts.setOnLoadCallback(drawChart);
+
         function drawChart() {
-            var free = document.getElementById("freeDisk").innerText;
-            var used = document.getElementById("usedDisk").innerText;
-            var data = google.visualization.arrayToDataTable([
-                ['Storage', 'Disk Usage'],
-                ['Empty',     free],
-                ['Used',      used]
-            ]);
+            $.get('/getDiskData', function(diskData){
+                if(diskData){
+                    let free = diskData.free - 0;
+                    let used = diskData.used - 0;
+                    var data = google.visualization.arrayToDataTable([
+                        ['Storage', 'Disk Usage'],
+                        ['Empty',     free],
+                        ['Used',      used]
+                    ]);
 
-            var options = {
-                title: 'Total Disk Storage',
-                pieHole: 0.4,
-            };
-            var chart = new google.visualization.PieChart(document.getElementById('result'));
-
-
-
-            var source   = document.getElementById('donutchart').innerHTML;
-            var template = Handlebars.compile(source);
-
-            var context = {piechart: chart};
-            var html    = template(context);
-            document.getElementById('result').innerHTML = html;
-            chart.draw(data, options);
+                    var options = {
+                        title: 'Total Disk Storage',
+                        pieHole: 0.4,
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('result'));
+                    var source   = document.getElementById('donutchart').innerHTML;
+                    var template = Handlebars.compile(source);
+                    var context = {piechart: chart};
+                    var html    = template(context);
+                    document.getElementById('result').innerHTML = html;
+                    chart.draw(data, options);
+                }else{
+                    alert("No data has been recieved");
+                }
+            });
         }
 </script>
 <h1>{{title}}</h1>
@@ -37,10 +41,8 @@
 <div id="result" style="width: 900px; height: 500px;">
 
 </div>
-<div>
-    Total disk space: <div id="totalDisk">{{disk.total}}</div> bytes
-    <br>
-    Total disk used: <div id="usedDisk">{{disk.used}}</div> bytes
-    <br>
-    Total disk free: <div id="freeDisk">{{disk.free}}</div> bytes
-</div>
+Total disk space: {{disk.total}} bytes
+<br>
+Total disk used: {{disk.used}} bytes
+<br>
+Total disk free: {{disk.free}} bytes
