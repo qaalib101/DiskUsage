@@ -1,38 +1,3 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            $.get('/getDiskData', function(diskData){
-                if(diskData){
-                    let free = diskData.free - 0;
-                    let used = diskData.used - 0;
-                    var data = google.visualization.arrayToDataTable([
-                        ['Storage', 'Disk Usage'],
-                        ['Empty',     free],
-                        ['Used',      used]
-                    ]);
-
-                    var options = {
-                        title: 'Total Disk Storage',
-                        pieHole: 0.4,
-                    };
-                    var chart = new google.visualization.PieChart(document.getElementById('result'));
-                    var source   = document.getElementById('donutchart').innerHTML;
-                    var template = Handlebars.compile(source);
-                    var context = {piechart: chart};
-                    var html    = template(context);
-                    document.getElementById('result').innerHTML = html;
-                    chart.draw(data, options);
-                }else{
-                    alert("No data has been recieved");
-                }
-            });
-        }
-</script>
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
 <script id="donutchart" type="text/x-handlebars-template">
@@ -46,3 +11,85 @@ Total disk space: {{disk.total}} bytes
 Total disk used: {{disk.used}} bytes
 <br>
 Total disk free: {{disk.free}} bytes
+<br>
+<input type="file" id="FileUpload" onchange="listFiles(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+<script id="templateList" type="text/x-handlebars-template">
+    <h3>List of top ten files by size</h3>
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Size(bytes)</th>
+                <th>Last Modified Date</th>
+            </thead>
+            <tbody>
+                {{#each choices}}
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{size}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </script>
+<div id="fileList">
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        $.get('/getDiskData', function(diskData){
+            if(diskData){
+                let free = diskData.free - 0;
+                let used = diskData.used - 0;
+                var data = google.visualization.arrayToDataTable([
+                    ['Storage', 'Disk Usage'],
+                    ['Empty',     free],
+                    ['Used',      used]
+                ]);
+
+                var options = {
+                    title: 'Total Disk Storage',
+                    pieHole: 0.4,
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('result'));
+                var source   = document.getElementById('donutchart').innerHTML;
+                var template = Handlebars.compile(source);
+                var context = {piechart: chart};
+                var html    = template(context);
+                console.dir(html);
+                document.getElementById('result').innerHTML = html;
+                chart.draw(data, options);
+            }else{
+                alert("No data has been recieved");
+            }
+        });
+    }
+    function listFiles(event){
+        var theFiles = event.target.files;
+        var data = [];
+        for(var i = 0;i<theFiles.length;i++){
+            data[i] = {
+                name: theFiles[i].name + " ",
+                size: theFiles[i].size + 0,
+                date: theFiles[i].lastModifiedDate
+            }
+        }
+        //greab the template script
+        var list = $("#templateList").html();
+        //compile ttemplate
+        var template = Handlebars.compile(list);
+        // define out data object
+        var context = {objects: data};
+        // pass our data
+        var html = template(context);
+        console.dir(template);
+        console.dir(data);
+        // ad the compiled html to page
+        $("#fileList").html(html);
+    }
+</script>
