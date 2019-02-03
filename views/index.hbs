@@ -1,5 +1,8 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Welcome to {{title}}</h1>
+    </div>
+</div>
 <script id="donutchart" type="text/x-handlebars-template">
     {{piechart}}
 </script>
@@ -12,35 +15,21 @@ Total disk used: {{disk.used}} bytes
 <br>
 Total disk free: {{disk.free}} bytes
 <br>
-<input type="file" id="FileUpload" onchange="listFiles(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
-<script id="templateList" type="text/x-handlebars-template">
-    <h3>List of top ten files by size</h3>
-        <table>
-            <thead>
-                <th>Name</th>
-                <th>Size(bytes)</th>
-                <th>Last Modified Date</th>
-            </thead>
-            <tbody>
-                {{#each choices}}
-                    <tr>
-                        <td>{{{name}}}</td>
-                        <td>{{{size}}}</td>
-                        <td>{{date}}</td>
-                    </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </script>
-<div id="fileList">
+<input class="btn-default" type="file" id="FileUpload" onchange="listFiles(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+<script id="barchart" type="text/x-handlebars-template">
+    {{barchart}}
+</script>
+<div id="barResult" style="width: 900px; height: 500px;">
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="handlebars-v4.0.12.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
-    google.charts.load("current", {packages:["corechart"]});
+    google.charts.load("current", {packages:["corechart", "bar"]});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
         $.get('/getDiskData', function(diskData){
@@ -70,27 +59,63 @@ Total disk free: {{disk.free}} bytes
             }
         });
     }
-    function listFiles(event){
+    function folderChart(files){
+        var data = google.visualization.arrayToDataTable([
+            ["File Name", "File Size"],
+            [files[0].name, files[0].size],
+            [files[1].name, files[1].size],
+            [files[2].name, files[2].size],
+            [files[3].name, files[3].size]
+        ]);
+
+        var options = {
+            title: 'Top ten files by size in directory',
+            hAxis: {
+                title: 'Time of Day',
+                format: 'h:mm a',
+                viewWindow: {
+                    min: [7, 30, 0],
+                    max: [17, 30, 0]
+                }
+            },
+            vAxis: {
+                title: 'Rating (scale of 1-10)'
+            },
+            width: 600,
+            height: 400,
+            bar: {groupWidth: "95%"},
+            legend: { position: "none" }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('barResult'));
+
+
+        var source   = document.getElementById('barchart').innerHTML;
+        var template = Handlebars.compile(source);
+        var context = {barchart: chart};
+        var html    = template(context);
+        document.getElementById('barResult').innerHTML = html;
+        chart.draw(data, options);
+    }
+    function listFiles(event) {
+        var files = [];
         var theFiles = event.target.files;
-        var data = [];
-        for(var i = 0;i<theFiles.length;i++){
-            data[i] = {
-                name: theFiles[i].name + " ",
-                size: theFiles[i].size + 0,
+        for (var i = 0; i < theFiles.length; i++) {
+            files[i] = {
+                name: theFiles[i].name,
+                size: theFiles[i].size,
                 date: theFiles[i].lastModifiedDate
             }
         }
-        //greab the template script
-        var list = $("#templateList").html();
-        //compile ttemplate
-        var template = Handlebars.compile(list);
-        // define out data object
-        var context = {objects: data};
-        // pass our data
-        var html = template(context);
-        console.dir(template);
-        console.dir(data);
-        // ad the compiled html to page
-        $("#fileList").html(html);
+        var topFiles = [];
+        for( i=0; i<10; i++){
+            var files2 = files.concat();
+            var res = Math.max.apply(Math,files2.map(function(o){return o.size;}));
+            var obj = files.find(o => o.size === res);
+            topFiles[i] = obj;
+            files.splice(files.indexOf(obj), 1);
+        }
+        console.log(topFiles);
+        google.charts.setOnLoadCallback(folderChart(topFiles));
     }
 </script>
