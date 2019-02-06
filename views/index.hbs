@@ -43,11 +43,11 @@ Total disk free: {{disk.free}} bytes
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div id="barResult" class="container tab-pane active"><br>
+        <div id="barResult" class="container tab-pane active" style="width: 900px; height: 500px;"><br>
         </div>
-        <div id="pieResult" class="container tab-pane fade"><br>
+        <div id="pieResult" class="container tab-pane fade" style="width: 900px; height: 500px;"><br>
         </div>
-        <div id="dateResult" class="container tab-pane fade"><br>
+        <div id="dateResult" class="container tab-pane fade" style="width: 900px; height: 500px;"><br>
         </div>
     </div>
 </div>
@@ -58,7 +58,7 @@ Total disk free: {{disk.free}} bytes
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
-    $("#chartTabs").hide();
+
     google.charts.load("current", {packages:["corechart", "bar"]});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
@@ -94,23 +94,25 @@ Total disk free: {{disk.free}} bytes
         data.addColumn('number', 'File Size');
         for(var i = 0; i<files.length; i++){
             data.addRows([
-                [files[i].name, files[i].size]
+                [files[i].name.toString(), files[i].size]
             ])
         }
         var options = {
             title: 'Top files by size in directory',
             hAxis: {
                 title: 'File Size',
+                gridlines: { count: 4 }
             },
             vAxis: {
                 title: 'File Name',
-                showTextEvery: 10,
-                slantedText: true,
-                slantedTextAngle: 90,
-                viewWindow:{max:10}
+                showTextEvery: 1,
+                legend: 'none',
+                bar: {groupWidth: '95%'}
             },
-            width:1100,
-            height:600
+            chartArea:{
+                width:900,
+                height:500,
+            }
         };
 
         var chart = new google.visualization.BarChart(document.getElementById('barResult'));
@@ -157,21 +159,17 @@ Total disk free: {{disk.free}} bytes
         var options = {
             title: 'Grouping files by date',
             hAxis: {
-                title: 'Date',
                 format:'yyyy',
                 gridlines:{
                     count:6
-                }
-
+                },
             },
             vAxis: {
-                title: 'Amount of files',
-                viewWindow:{
-                    min: 0
-                }
+                format: 'short',
+                gridlines: 4
             },
-            width: 900,
-            height: 500
+            width: 800,
+            height: 400
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('dateResult'));
@@ -201,7 +199,6 @@ Total disk free: {{disk.free}} bytes
         google.charts.setOnLoadCallback(folderChart(topFiles));
         google.charts.setOnLoadCallback(pieChart(fileTypes));
         google.charts.setOnLoadCallback(dateChart(dateArray));
-        $("#chartTabs").show();
     }
     function getTopFiles(files){
         var topFiles = [];
