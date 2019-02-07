@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var Disk = require('../models/localdisk');
-var dirname = 'C';
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,10 +13,11 @@ router.get('/', function(req, res, next) {
     }
   });
 });
+// used to get disk data if requested by a ajax call
 router.get('/getDiskData', function(req, res, next){
   Disk(function(err, diskData){
     res.json(diskData);
-  }, dirname)
+  }, process.env.DEFAULT_DIR)
 });
 
 module.exports = router;

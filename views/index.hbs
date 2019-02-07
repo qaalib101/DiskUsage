@@ -1,43 +1,51 @@
+<!--- Container for the jumbotron--->
 <div class="container">
     <div class="jumbotron">
         <h1>Welcome to {{title}}</h1>
     </div>
 </div>
+<!--- Script element used for handlebars so that the web page does not read it as an element theses types of handlebars templates are abundant on this web page--->
 <script id="donutchart" type="text/x-handlebars-template">
     {{donutchart}}
 </script>
+
 <div id="result" style="width: 900px; height: 500px;">
 
 </div>
+<!---Disk space displayed in handlebars template data from server--->
 Total disk space: {{disk.total}} bytes
 <br>
 Total disk used: {{disk.used}} bytes
 <br>
 Total disk free: {{disk.free}} bytes
 <br>
+<!---Button used to prompt user to upload files to the server triggers listFiles function--->
 <input class="btn btn-default" type="file" id="FileUpload" onchange="listFiles(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+<!---Same templates as before but these are used for different graphs--->
 <script id="barChart" type="text/x-handlebars-template">
     {{barchart}}
 </script>
 <script id="pieChart" type="text/x-handlebars-template">
     {{piechart}}
 </script>
+<!---is a line chart just named a date chart for convenience--->
 <script id="dateChart" type="text/x-handlebars-template">
     {{datechart}}
 </script>
+<!--- Container for the tabs they are hidden but reveal themselves to show the graphs--->
 <div class="container" id="chartTabs">
     <h2>File Charts</h2>
     <br>
-    <!-- Nav tabs -->
+    <!-- Different graphs, the bar chart, pie graph and line graph -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#barResult">Top Files by Size</a>
+            <a class="nav-link active" data-toggle="tab" href="#barResult">Top Files</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#pieResult">Directory by File Type</a>
+            <a class="nav-link" data-toggle="tab" href="#pieResult">File Types</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#dateResult">File Modification by date</a>
+            <a class="nav-link" data-toggle="tab" href="#dateResult">File Modifications</a>
         </li>
     </ul>
 
@@ -58,12 +66,21 @@ Total disk free: {{disk.free}} bytes
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
-
-    google.charts.load("current", {packages:["corechart", "bar"]});
+    //tabs are hidden on page load
+    $("#chartTabs").hide();
+    // file arrays
+    let topFiles, fileTypes, dateArray, files = [];
+    // count for line graph formats
+    let count = 1;
+    google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(drawChart);
+
     function drawChart() {
+        // calls diskdata router and gets the data
         $.get('/getDiskData', function(diskData){
+            // if there is data show the graph if not then produce error
             if(diskData){
+                // literal casting of strings to number
                 let free = diskData.free - 0;
                 let used = diskData.used - 0;
                 var data = google.visualization.arrayToDataTable([
@@ -71,32 +88,81 @@ Total disk free: {{disk.free}} bytes
                     ['Empty',     free],
                     ['Used',      used]
                 ]);
-
+                // options
                 var options = {
                     title: 'Total Disk Storage',
                     pieHole: 0.4,
+                    is3D: true
                 };
+                // this bit gets the chart ready to be put into handlebars template
+
                 var chart = new google.visualization.PieChart(document.getElementById('result'));
                 var source   = document.getElementById('donutchart').innerHTML;
                 var template = Handlebars.compile(source);
                 var context = {donutchart: chart};
                 var html    = template(context);
                 document.getElementById('result').innerHTML = html;
+
                 chart.draw(data, options);
             }else{
                 alert("No data has been recieved");
             }
         });
     }
+    function listFiles(event) {
+        // event gets files and puts it into filelist program converts filelist into array
+        let theFiles = event.target.files;
+        for (var i = 0; i < theFiles.length; i++) {
+            files[i] = {
+                name: theFiles[i].name,
+                type: theFiles[i].type,
+                size: theFiles[i].size,
+                date: theFiles[i].lastModifiedDate
+            }
+        }
+        // getting data for the charts
+        topFiles = getTopFiles(files);
+        fileTypes = getFileTypes(files);
+        dateArray = groupBy(files, 'date', count);
+        //make tabs appear as charts are drawn into them
+        chartInTabs();
+    }
+    function chartInTabs() {
+        // show charts
+        $("#chartTabs").show();
+        // chooses a chart based on tab chosen
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            switch ($(e.target).html()) {
+                case 'Top Files':
+                    folderChart(topFiles);
+                    break;
+
+                case 'File Types':
+                    pieChart(fileTypes);
+                    break;
+
+                case 'File Modifications':
+                    changeFormat();
+                    break;
+            }
+        });
+        // draw chart on initial tab
+        folderChart(topFiles);
+    }
     function folderChart(files){
+        // set datatable object like an database table
         var data = new google.visualization.DataTable();
+        // columns
         data.addColumn('string', 'File Name');
         data.addColumn('number', 'File Size');
+        //loops around files just in case intended file amount is not present
         for(var i = 0; i<files.length; i++){
+            //rows
             data.addRows([
                 [files[i].name.toString(), files[i].size]
             ])
         }
+        // options like title and viewing
         var options = {
             title: 'Top files by size in directory',
             hAxis: {
@@ -109,12 +175,11 @@ Total disk free: {{disk.free}} bytes
                 legend: 'none',
                 bar: {groupWidth: '95%'}
             },
-            chartArea:{
-                width:900,
-                height:500,
-            }
+            width:900,
+            height:500,
         };
 
+        //same code to place chart in element and then draw it
         var chart = new google.visualization.BarChart(document.getElementById('barResult'));
 
         var source   = document.getElementById('barChart').innerHTML;
@@ -125,6 +190,7 @@ Total disk free: {{disk.free}} bytes
         chart.draw(data, options);
     }
     function pieChart(files){
+        //datatable object
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'File Type');
         data.addColumn('number', 'File Size');
@@ -139,6 +205,7 @@ Total disk free: {{disk.free}} bytes
             width: 900,
             height: 500,
         };
+        // templating chart for handlebars
         var chart = new google.visualization.PieChart(document.getElementById('pieResult'));
         var source   = document.getElementById('pieChart').innerHTML;
         var template = Handlebars.compile(source);
@@ -148,6 +215,7 @@ Total disk free: {{disk.free}} bytes
         chart.draw(data, options);
     }
     function dateChart(files){
+        // datatable
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'File Year');
         data.addColumn('number', 'Amount of files');
@@ -159,22 +227,21 @@ Total disk free: {{disk.free}} bytes
         var options = {
             title: 'Grouping files by date',
             hAxis: {
-                format:'yyyy',
-                gridlines:{
-                    count:6
-                },
+                title: 'Dates by ',
+                gridlines: 6
             },
             vAxis: {
+                title: 'Amount of files modified',
                 format: 'short',
-                gridlines: 4
+                gridlines: 6
             },
-            width: 800,
-            height: 400
+            width: 900,
+            height: 500
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('dateResult'));
 
-
+        //templating
         var source   = document.getElementById('dateChart').innerHTML;
         var template = Handlebars.compile(source);
         var context = {datechart: chart};
@@ -182,32 +249,18 @@ Total disk free: {{disk.free}} bytes
         document.getElementById('dateResult').innerHTML = html;
         chart.draw(data, options);
     }
-    function listFiles(event) {
-        var files = [];
-        var theFiles = event.target.files;
-        for (var i = 0; i < theFiles.length; i++) {
-            files[i] = {
-                name: theFiles[i].name,
-                type: theFiles[i].type,
-                size: theFiles[i].size,
-                date: theFiles[i].lastModifiedDate
-            }
-        }
-        var topFiles = getTopFiles(files);
-        var fileTypes = getFileTypes(files);
-        var dateArray = groupBy(files, 'date');
-        google.charts.setOnLoadCallback(folderChart(topFiles));
-        google.charts.setOnLoadCallback(pieChart(fileTypes));
-        google.charts.setOnLoadCallback(dateChart(dateArray));
-    }
     function getTopFiles(files){
+        // getting the topfiles
         var topFiles = [];
+        // default is ten files if files are smaller than the files are used
         var breakingPoint = 10;
         if(files.length < 10){
             breakingPoint = files.length
         }
+        // copies array to get topfiles with
         var files2 = files.concat();
         for( i=0; i<breakingPoint; i++){
+            // math.max gets max value array.map gets
             var res = Math.max.apply(Math,files2.map(function(o){return o.size;}));
             var obj = files2.find(o => o.size === res);
             topFiles[i] = obj;
@@ -216,6 +269,7 @@ Total disk free: {{disk.free}} bytes
         return topFiles;
     }
     function getFileTypes(files){
+        // file types are limited dut to html input element
           var fileTypes = [
               {
                   type: "application",
@@ -233,6 +287,7 @@ Total disk free: {{disk.free}} bytes
                   type:"other",
                   amount: 0}
           ];
+          // gets mime type and splices it only needs first half
           for(var i = 0; i < files.length; i++){
               var isOther = true;
               var fileType = files[i].type;
@@ -243,33 +298,79 @@ Total disk free: {{disk.free}} bytes
                       isOther = false;
                   }
               }
+              //adds to new filetypes
               if(isOther == true){
                   fileTypes[4].amount += 1;
               }
           }
           return fileTypes;
     }
-    function groupBy(files, property) {
-        var i = 0, val, result = [];
+    function groupBy(files, property){
+        // groups by the date
+        var i = 0, year, month, day, val, result = [];
         for (; i < files.length; i++) {
             var isOther = true;
-            val = files[i][property].getFullYear();
-            for(var n=0; n<result.length; n++){
-                if(result[n].date.getFullYear()===val){
+            // depending on count will change format
+            if(count === 1){
+                year = files[i][property].getFullYear();
+                month = files[i][property].getMonth();
+                day = files[i][property].getDate();
+                val = new Date(year, month, day);
+            }
+            else if(count === 2){
+                year = files[i][property].getFullYear();
+                month = files[i][property].getMonth();
+                val = new Date(year, month);
+            }
+            else if (count===3){
+                year = files[i][property].getFullYear();
+                val = new Date(year, 0, 0);
+            }
+            // loops through date array to find same date
+            for(let n = 0; n < result.length; n++){
+                if(result[n].date.getTime()===val.getTime()){
                     result[n].amount += 1;
                     isOther = false;
                 }
             }
+            // creates new object in date array based on the count
             if(isOther === true) {
-                result.push({
-                    date: new Date(val, 0),
-                    amount: 1
-                });
+                switch (count) {
+                    case 1:
+                        result.push({
+                            date: new Date(year, month, day),
+                            amount: 1
+                        });
+                        break;
+                    case 2:
+                        result.push({
+                            date: new Date(year, month),
+                            amount: 1
+                        });
+                        break;
+                    case 3:
+                        result.push({
+                            date: new Date(year, 0, 0),
+                            amount: 1
+                        });
+                        break;
+                }
             }
         }
+        // sorts the dates
         result.sort(function(a, b){
-            return a.date.getFullYear()-b.date.getFullYear();
+            return a.date.getTime()-b.date.getTime();
         });
+        //changes the count after the function executes
+        if(count === 3){
+            count = 0;
+        }
+        count +=1;
         return result;
+    }
+    // used to change the formats calls the group by method and then passes it into the datechart function
+    function changeFormat(){
+        dateArray = groupBy(files, 'date');
+        dateChart(dateArray);
     }
 </script>
