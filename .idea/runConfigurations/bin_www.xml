@@ -3,7 +3,7 @@
     <envs>
       <env name="DEBUG" value="diskusage:*" />
       <env name="NODE_ENV" value="production" />
-      <env name="DEFAULT_DIR" value="C" />
+      <env name="DEFAULT_DIR" value="&quot;C&quot;" />
     </envs>
     <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
       <browser url="http://localhost:3000/" />

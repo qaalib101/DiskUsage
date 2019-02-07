@@ -6,4 +6,4 @@ The program also lets the user choose a folder on the computer. Then it provides
 The bar graph shows the top ten files(if the directory has lower than it show those). The pie graph shows the file types in the directory.
 And the line graph shows the files modified by date. You can scroll between either day, month, year.
 
-You will node.js, npm for packages. 
+You will need node.js, npm for packages. 

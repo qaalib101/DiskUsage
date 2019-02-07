@@ -1,7 +1,7 @@
 var diskspace = require("diskspace");
 
 // get disk space
-function diskRequest(callback, dirname = 'C'){
+function diskRequest(callback, dirname){
 
     diskspace.check(dirname, function(err, result){
         var diskData = {
