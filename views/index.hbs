@@ -122,7 +122,7 @@ Total disk free: {{disk.free}} bytes
         // getting data for the charts
         topFiles = getTopFiles(files);
         fileTypes = getFileTypes(files);
-        dateArray = groupBy(files, 'date', count);
+        dateArray = groupBy(files, 'date');
         //make tabs appear as charts are drawn into them
         chartInTabs();
     }
@@ -227,7 +227,7 @@ Total disk free: {{disk.free}} bytes
         var options = {
             title: 'Grouping files by date',
             hAxis: {
-                title: 'Dates by ',
+                title: 'Grouped Dates',
                 gridlines: 6
             },
             vAxis: {
@@ -371,6 +371,6 @@ Total disk free: {{disk.free}} bytes
     // used to change the formats calls the group by method and then passes it into the datechart function
     function changeFormat(){
         dateArray = groupBy(files, 'date');
-        dateChart(dateArray);
+        dateChart(dateArray)
     }
 </script>
