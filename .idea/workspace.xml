@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c72f4645-8c21-4c1a-840f-e08e0569e690" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.hbs" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+            <state relative-caret-position="374">
+              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -31,17 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/localdisk.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/diskspace/diskspace.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+            <state relative-caret-position="255">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
@@ -61,13 +51,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/views/index.hbs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="228" column="44" lean-forward="true" selection-start-line="228" selection-start-column="44" selection-end-line="228" selection-end-column="44" />
+            <state relative-caret-position="-277">
+              <caret line="161" column="14" lean-forward="true" selection-start-line="161" selection-start-column="14" selection-end-line="161" selection-end-column="14" />
               <folding>
-                <element signature="e#3200#4561#0#HTML" />
-                <element signature="e#5283#5911#0#HTML" />
-                <element signature="e#5943#7354#0#HTML" />
                 <element signature="e#7383#8310#0#HTML" />
+                <element signature="e#8340#9469#0#HTML" />
                 <element signature="e#9501#10192#0#HTML" />
                 <element signature="e#10225#11380#0#HTML" />
                 <element signature="e#11418#13655#0#HTML" />
@@ -147,6 +135,17 @@
             <path>
               <item name="DiskUsage" type="b2602c69:ProjectViewProjectNode" />
               <item name="DiskUsage" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DiskUsage" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DiskUsage" type="462c0819:PsiDirectoryNode" />
+              <item name="node_modules" type="462c0819:PsiDirectoryNode" />
+              <item name="diskspace" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="DiskUsage" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DiskUsage" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -219,7 +218,7 @@
       <workItem from="1548838416142" duration="66000" />
       <workItem from="1548868312975" duration="115329000" />
       <workItem from="1549550943706" duration="3807000" />
-      <workItem from="1549917335067" duration="2687000" />
+      <workItem from="1549917335067" duration="4091000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;heroku&quot;">
       <created>1548220280535</created>
@@ -312,11 +311,18 @@
       <option name="project" value="LOCAL" />
       <updated>1549554585249</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="heroku fix">
+      <created>1549920473917</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1549920473917</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="229801000" />
+    <option name="totallyTimeSpent" value="231205000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -329,8 +335,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7282609" visible="true" weight="0.2027027" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7282609" visible="true" weight="0.2027027" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.27173913" side_tool="true" weight="0.39448053" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -342,7 +349,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3285968" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3285968" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.28774422" />
+      <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.14387211" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5007949" side_tool="true" weight="0.39964476" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -447,27 +454,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/localdisk.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/diskspace/diskspace.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -478,15 +464,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/diskspace/diskspace.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="20" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/localdisk.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/views/index.hbs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="228" column="44" lean-forward="true" selection-start-line="228" selection-start-column="44" selection-end-line="228" selection-end-column="44" />
+        <state relative-caret-position="-277">
+          <caret line="161" column="14" lean-forward="true" selection-start-line="161" selection-start-column="14" selection-end-line="161" selection-end-column="14" />
           <folding>
-            <element signature="e#3200#4561#0#HTML" />
-            <element signature="e#5283#5911#0#HTML" />
-            <element signature="e#5943#7354#0#HTML" />
             <element signature="e#7383#8310#0#HTML" />
+            <element signature="e#8340#9469#0#HTML" />
             <element signature="e#9501#10192#0#HTML" />
             <element signature="e#10225#11380#0#HTML" />
             <element signature="e#11418#13655#0#HTML" />
